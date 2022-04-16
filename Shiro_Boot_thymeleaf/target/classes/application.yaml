@@ -1,0 +1,97 @@
+debug: false
+
+server:
+  port: 80
+  # servlet
+  servlet:
+    context-path: /
+
+# spring
+spring:
+  application:
+    name: shiroThemleaf
+  # thymeleaf
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
+  # mysql
+  datasource:
+    username: root
+    password: bsy8023.00
+    url: jdbc:mysql://localhost:3306/shiro?useSSL=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&rewriteBatchedStatements=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # druid
+    type: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceWrapper
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-return: false
+      test-on-borrow: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      break-after-acquire-failure: true
+      time-between-connect-error-millis: 300000
+      async-init: true
+      remove-abandoned: true
+      remove-abandoned-timeout: 1800
+      transaction-query-timeout: 6000
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      use-global-data-source-stat: true
+      aop-patterns: com.pepsiwyl.service.*
+
+      filters: stat,wall
+      filter:
+        stat:
+          enabled: true
+          slow-sql-millis: 1000
+          log-slow-sql: true
+        wall:
+          enabled: true
+          config:
+            drop-table-allow: false
+
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: 'pepsi-wyl'
+        login-password: '000000'
+        allow:
+        deny:
+
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico
+        session-stat-enable: true
+        session-stat-max-count: 10
+        principal-session-name: session_name
+        principal-cookie-name: cookie_name
+
+  # redis
+  redis:
+    host: 101.43.169.194
+    port: 6379
+    password: bsy8023.00
+    database: 0
+    # jedis
+    client-type: jedis
+    jedis:
+      pool:
+        max-active: 20
+        max-idle: 5
+        min-idle: 0
+
+# mybatis-plus
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.pepsiwyl.pojo
+  mapper-locations: classpath*:/mapper/**/*.xml
